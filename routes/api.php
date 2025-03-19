@@ -4,6 +4,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\OffreController;
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/offres', [OffreController::class, 'creerOffre']); // Ajouter une offre
+    Route::get('/offres', [OffreController::class, 'listeOffres']); // Voir toutes les offres
+    Route::get('/offres/{id}', [OffreController::class, 'voirOffre']); // Voir une offre spécifique
+});
+
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
