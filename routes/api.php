@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\OffreController;
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/candidatures', [CandidatureController::class, 'postuler']);
+    Route::delete('/candidatures/{id}', [CandidatureController::class, 'retirer']);
+    Route::get('/recruteur/candidatures', [CandidatureController::class, 'getCandidaturesRecruteur']);
+});
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/offres', [OffreController::class, 'creerOffre']); // Ajouter une offre
