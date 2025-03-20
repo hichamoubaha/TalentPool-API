@@ -86,6 +86,22 @@ class CandidatureController extends Controller {
     return response()->json(['message' => 'Statut de la candidature mis à jour.', 'candidature' => $candidature]);
 }
 
+public function statistiquesRecruteur() {
+    try {
+        // Vérifier que l'utilisateur est bien authentifié
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
+        }
+
+        // Vérifier que l'utilisateur est un recruteur
+        $offres = $user->offres()->withCount('candidatures')->get(); // Get all offers with the count of applications for each offer
+
+        return response()->json($offres, 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Erreur interne du serveur.', 'error' => $e->getMessage()], 500);
+    }
+}
 
     
 }
