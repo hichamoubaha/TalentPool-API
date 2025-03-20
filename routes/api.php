@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidatureController;
 
+Route::middleware('auth:sanctum')->get('statistiques/recruteur', [CandidatureController::class, 'statistiquesRecruteur']);
+
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('candidatures/{id}/statut', [CandidatureController::class, 'mettreAJourStatut']);
