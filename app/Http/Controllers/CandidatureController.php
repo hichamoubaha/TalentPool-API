@@ -103,5 +103,41 @@ public function statistiquesRecruteur() {
     }
 }
 
+
+public function statistiquesAdministrateur() {
+    try {
+        // Vérifier que l'utilisateur est bien authentifié et administrateur
+        $user = Auth::user();
+        if (!$user || !$user->hasRole('administrateur')) {
+            return response()->json(['message' => 'Accès non autorisé.'], 403);
+        }
+
+        // Total number of offers
+        $totalOffres = \App\Models\Offre::count();
+
+        // Total number of applications
+        $totalCandidatures = \App\Models\Candidature::count();
+
+        // Total number of recruiters (users with the 'recruteur' role)
+        $totalRecruteurs = \App\Models\User::whereHas('roles', function($query) {
+            $query->where('name', 'recruteur');
+        })->count();
+
+        // Total number of candidates (users with the 'candidat' role)
+        $totalCandidats = \App\Models\User::whereHas('roles', function($query) {
+            $query->where('name', 'candidat');
+        })->count();
+
+        return response()->json([
+            'total_offres' => $totalOffres,
+            'total_candidatures' => $totalCandidatures,
+            'total_recruteurs' => $totalRecruteurs,
+            'total_candidats' => $totalCandidats,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Erreur interne du serveur.', 'error' => $e->getMessage()], 500);
+    }
+}
+
     
 }
