@@ -14,10 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('offres', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            //
         });
     }
-    
 
     /**
      * Reverse the migrations.

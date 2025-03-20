@@ -62,6 +62,30 @@ class CandidatureController extends Controller {
         }
     }
     
+    public function mettreAJourStatut($id, Request $request)
+{
+    $request->validate([
+        'statut' => 'required|in:en attente,acceptée,rejetée,en entretien',
+    ]);
+
+    // Find the candidature by ID
+    $candidature = Candidature::findOrFail($id);
+
+    // Check if the user is the recruiter for the offer related to the candidature
+    if ($candidature->offre->recruteur_id !== Auth::id()) {
+        return response()->json(['message' => 'Vous n\'êtes pas autorisé à modifier cette candidature.'], 403);
+    }
+
+    // Update the status of the candidature
+    $candidature->statut = $request->statut;
+    $candidature->save();
+
+    // Notify the candidate about the status change
+    \Mail::to($candidature->user->email)->send(new CandidatureStatusUpdated($candidature));
+
+    return response()->json(['message' => 'Statut de la candidature mis à jour.', 'candidature' => $candidature]);
+}
+
 
     
 }
