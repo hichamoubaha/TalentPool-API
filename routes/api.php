@@ -7,6 +7,7 @@ use App\Http\Controllers\CandidatureController;
 
 Route::middleware('auth:sanctum')->get('statistiques/recruteur', [CandidatureController::class, 'statistiquesRecruteur']);
 
+Route::middleware('auth:sanctum')->get('statistiques/administrateur', [CandidatureController::class, 'statistiquesAdministrateur']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
